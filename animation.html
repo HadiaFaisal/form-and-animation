@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#181028] flex justify-center items-center min-h-screen">
+    <div id="circle" class="circle"></div>
+
+    <div id="menu" class="p-4 rounded-lg w-64">
+        <button id="moon" class="btn flex flex-col gap-[6px] w-10 h-10 p-2">
+            <span class="moon">&#127769;</span>
+        </button>
+        <nav class="text-white p-8">
+            <ul class="space-y-4 font-bold text-xl">
+                <li><a class="hov text-slate-400 tracking-wider hover:text-purple-500" href="#">Home</a></li>
+                <li><a class="hov text-slate-400 tracking-wider hover:text-purple-500" href="#">About</a></li>
+                <li><a class="hov text-slate-400 tracking-wider hover:text-purple-500" href="#">Portfolio</a></li>
+                <li><a class="hov text-slate-400 tracking-wider hover:text-purple-500" href="#">Blog</a></li>
+                <li><a class="hov text-slate-400 tracking-wider hover:text-purple-500" href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</body>
+
+</html>
+
+<style>
+    .line {
+        background: #fff;
+        position: relative;
+        height: 2px;
+        width: 100%;
+        transition: background 0.3s;
+        z-index: 10;
+    }
+
+    .btn:hover .line {
+        background: #181028;
+    }
+
+    #menu {
+        transition: background 0.3s;
+    }
+
+    #menu.open {
+        background: #2C2446;
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    #menu .btn .line {
+        transition: transform 0.3s, opacity 0.3s;
+        transform-origin: center left;
+    }
+
+    #menu.open .btn .line:nth-of-type(1) {
+        transform: rotate(45deg);
+    }
+
+    #menu.open .btn .line:nth-of-type(2) {
+        opacity: 0;
+    }
+
+    #menu.open .btn .line:nth-of-type(3) {
+        transform: rotate(-45deg);
+    }
+
+    #menu nav {
+        display: none; /* Hide the navigation initially */
+    }
+
+    .hov {
+        position: relative;
+    }
+
+    .hov::before {
+        content: '';
+        background: #a855f7;
+        opacity: 0;
+        position: absolute;
+        left: -3rem;
+        top: 0;
+        height: 120%;
+        width: 3px;
+        transition: opacity 0.3s;
+    }
+
+    .hov:hover::before {
+        opacity: 1;
+    }
+
+    .circle {
+        border: 2px solid white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px white;
+        pointer-events: none;
+        position: fixed;
+        top: -10rem;
+        left: -10rem;
+        height: 2rem;
+        width: 2rem;
+        transition: transform 0.4s, background 0.4s;
+    }
+
+    .circle.big {
+        background: white;
+        transform: scale(2);
+    }
+
+    .heart {
+        position: fixed;
+        color: #e74c3c; /* Heart color */
+        font-size: 24px;
+        animation: jump 0.5s ease-out;
+    }
+
+    .text {
+        position: fixed;
+        color: red; /* Text color */
+        font-size: 24px;
+        animation: fadeOut 3s ease-in; /* Text animation */
+    }
+
+    .moon {
+        font-size: 24px;
+    }
+
+    @keyframes jump {
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: translateY(-50px) scale(1.3);
+            opacity: 0.8;
+        }
+
+        100% {
+            transform: translateY(-100px) scale(1);
+            opacity: 0;
+        }
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+
+<script>
+    const moon = document.getElementById('moon');
+    const circle = document.getElementById('circle');
+
+    moon.addEventListener('click', () => {
+        // Create hearts and animate
+        createHearts(document.body);
+
+        
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        const height = circle.offsetHeight;
+        const width = circle.offsetWidth;
+
+        if (e.target.tagName === 'A' ||
+            e.target.tagName === 'BUTTON' ||
+            e.target.parentNode.tagName === 'BUTTON') {
+            circle.classList.add('big');
+        } else {
+            circle.classList.remove('big');
+        }
+
+        setTimeout(() => {
+            circle.style.left = `${e.pageX - width / 2}px`;
+            circle.style.top = `${e.pageY - height / 2}px`;
+        }, 20);
+    });
+
+    function createHearts(container) {
+        const heartCount = 10; // Number of hearts to create
+
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's'; // Random animation duration
+            heart.innerHTML = '⭐';
+            container.appendChild(heart);
+
+            // Remove hearts after animation ends
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+            });
+        }
+    }
+
+    
+</script>
